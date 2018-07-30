@@ -7,19 +7,19 @@ import timing
 
 def main():
     # Initialize
-    img = Image.open('maze.png')
+    maze='maze3.png'
+    img = Image.open(maze)
     change = 3
     width = img.width * change
     height = img.height * change
     screen = pygame.display.set_mode((width,height))
-    background = pygame.image.load('maze.png').convert()
+    background = pygame.image.load(maze).convert()
     newscreen = pygame.transform.scale(background, (width, height))
-    sleep = 0.01
+    from sleep import sleep
 
     #Colors
     color = (0, 188, 0)
     white = (255, 255, 255)
-    black = (255, 255, 255, 255)
     blue = (0, 0, 255)
     red = (255, 0, 0)
     green = (0, 188, 0)
@@ -125,7 +125,6 @@ def main():
     #Algorithm to determine direction to move if facing up
     def up(replace):
         global direction
-        print("up")
         if newscreen.get_at((currentX + blockSize, currentY)) == white:#right
             moveRight(currentX, currentY, blockSize, replace, sleep)
             direction = 2
@@ -142,7 +141,6 @@ def main():
     #Algorithm to determine direction to move if facing right
     def right(replace):
         global direction
-        print("right")
         if newscreen.get_at((currentX, currentY + blockSize)) == white:#down
             moveDown(currentX, currentY, blockSize, replace, sleep)
             direction = 4
@@ -159,7 +157,6 @@ def main():
     #Algorithm to determine direction to move if facing left
     def left(replace):
         global direction
-        print("right")
         if newscreen.get_at((currentX, currentY - blockSize)) == white:#up        
             moveUp(currentX, currentY, blockSize, replace, sleep)
             direction = 1
@@ -176,7 +173,6 @@ def main():
     #Algorithm to determine direction to move if facing down
     def down(replace):
         global direction
-        print("down")
         if newscreen.get_at((currentX - blockSize, currentY)) == white:#left
             moveLeft(currentX, currentY, blockSize, replace, sleep)
             direction = 3
@@ -196,7 +192,6 @@ def main():
 
     #original
     while 0 != currentY:
-        print(direction)
         if direction == 1:#up
             up(white)
         elif direction == 2:
@@ -205,7 +200,6 @@ def main():
             left(white)
         elif direction == 4:
             down(white)
-        print(direction)
 
 if __name__ == "__main__":
     main()
