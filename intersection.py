@@ -3,9 +3,11 @@ import sys, pygame, time, math
 from time import sleep
 from pygame.locals import *
 from PIL import Image
+import timing
+from init import *
 
 # Initialize
-maze='maze5.png'
+maze=('maze6.png')
 img = Image.open(maze)
 change = 3
 width = img.width * change
@@ -14,7 +16,7 @@ screen = pygame.display.set_mode((width,height))
 background = pygame.image.load(maze).convert()
 newscreen = pygame.transform.scale(background, (width, height))
 
-sleepTime=0.01
+sleepTime = sleep
 #number of turns
 upCount = 0
 leftCount = 0
@@ -565,4 +567,4 @@ pygame.image.save(newscreen, "capture.png")
 print("RIGHT PATH CHOSEN",rightCount,"TIMES")
 print("LEFT PATH CHOSEN",leftCount,"TIMES")
 print("FRONT PATH CHOSEN",upCount,"TIMES")
-time.sleep(5)
+#time.sleep(5)
