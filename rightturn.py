@@ -4,10 +4,10 @@ from time import sleep
 from pygame.locals import *
 from PIL import Image
 import timing
+from init import *
 
 def main():
     # Initialize
-    maze='maze3.png'
     img = Image.open(maze)
     change = 3
     width = img.width * change
@@ -15,8 +15,7 @@ def main():
     screen = pygame.display.set_mode((width,height))
     background = pygame.image.load(maze).convert()
     newscreen = pygame.transform.scale(background, (width, height))
-    from sleep import sleep
-
+    
     #Colors
     color = (0, 188, 0)
     white = (255, 255, 255)

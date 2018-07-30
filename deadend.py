@@ -3,11 +3,10 @@ import sys, pygame, time, math
 from time import sleep
 from pygame.locals import *
 from PIL import Image
-from sleep import sleep
 import timing
+from init import *
 
 # Initialize
-maze = 'maze5.png'
 img = Image.open(maze)
 change = 3
 blockSize = 5 * change
