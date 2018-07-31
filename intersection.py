@@ -7,7 +7,6 @@ import timing
 from init import *
 
 # Initialize
-maze=('maze6.png')
 img = Image.open(maze)
 change = 3
 width = img.width * change
@@ -312,142 +311,161 @@ def isIntersection():
     else:
         #-print(paths)
         #-print("isIntersection-FALSE")
-        '''
-        if direction == 1:
-            if(newscreen.get_at((currentX, currentY - blockSize)) == blue):
-                moveUp(currentX, currentY, blockSize, white)
-            else:
-                up(white)
-        if direction == 3:
-            if(newscreen.get_at((currentX - blockSize, currentY)) == blue):
-                moveLeft(currentX, currentY, blockSize, white)
-            else:
-                left(white)
-        if direction == 2:
-            if(newscreen.get_at((currentX + blockSize, currentY)) == blue):
-                moveRight(currentX, currentY, blockSize, white)
-            else:
-                right(white)
-        if direction == 4:
-            if(newscreen.get_at((currentX, currentY + blockSize)) == blue):
-                moveUp(currentX, currentY, blockSize, white)
-            else:
-                down(white)
-                '''
         return False
 
 varsInit(xvalueOfStart, yvalueOfStart)
 
 moveUp(currentX, currentY, blockSize, white)
 
-'''
-1 is up
-2 is right
-3 is left
-4 is down
-'''
-
 direction = 1
 
-
-def checkRed():#returns true if red is present
+def checkSurround(color):#returns direction or 0 if no color present on intersection paths
     global direction
-    if newscreen.get_at((currentX, currentY - blockSize)) == red:#up
-        direction = 1
-        moveUp(currentX, currentY, blockSize, blue)
-        return True
-    elif newscreen.get_at((currentX + blockSize, currentY)) == red:#right
-        direction = 2
-        moveRight(currentX, currentY, blockSize, blue)
-        return True
-    elif newscreen.get_at((currentX - blockSize, currentY)) == red:#left
-        direction = 3
-        moveLeft(currentX, currentY, blockSize, blue)
-        return True
-    elif newscreen.get_at((currentX,currentY+blockSize))==red:#down
-        direction = 4
-        moveDown(currentX, currentY, blockSize, blue)
-        return True
+    if newscreen.get_at((currentX, currentY - blockSize)) == color:#up
+        #direction = 4
+        #-print("checkRed-red up-AI faces down")#debug
+        return 1
+    elif newscreen.get_at((currentX + blockSize, currentY)) == color:#right
+        #direction = 3
+        #-print("checkRed-red right-AI faces left")#debug
+        return 2
+    elif newscreen.get_at((currentX - blockSize, currentY)) == color:#left
+        #direction = 2
+        #-print("checkRed-red left-AI faces right")#debug
+        return 3
+    elif newscreen.get_at((currentX,currentY+blockSize))==color:#down
+        #direction = 1
+        #-print("checkRed-red down-AI faces up")#debug
+        return 4
+    else:
+        #-print("checkRed-no red present")#debug
+        return 0
 
     return False
-    print("direction-checkRed", direction)
+    #-print("direction-checkRed", direction)
 
 def addCount(isInt,directionMove,firstTime):
     global direction,rightCount,upCount,leftCount
     #direction=direction coming into intersection
     #directionMove=direction leaving intersection
     if isInt:
-        print("addCount-isInt")
-        if firstTime: #first time at intersection
-            print("addCount-first time intersection")
-            print("addCount-direction",direction)
-            print("addCount-directionMove",directionMove)
-            if direction==1:#up
+        #-print("addCount-isIntersection-TRUE")#debug
+        #-print("addCount-checkRed output",checkSurround(red))
+        if checkSurround(red)==4:#AI faces up
+            #-print("addCount-AI up")#debug
+            if directionMove==1:#up
+                upCount+=1
+            if directionMove==3:#left
+                leftCount+=1
+            if directionMove==2:#right
+                rightCount+=1
+            if direction==4:#AI comes from top
+                upCount-=1
+            if direction==3:#AI comes from right
+                rightCount-=1
+            if direction==2:#AI comes from left
+                leftCount-=1
+        if checkSurround(red)==3:#AI faces right
+            #-print("addCount-AI right")#debug
+            if directionMove==2:#right
+                upCount+=1
+            if directionMove==1:#up
+                leftCount+=1
+            if directionMove==4:#down
+                rightCount+=1
+            if direction==3:#AI comes from right
+                upCount-=1
+            if direction==1:#AI comes from bottom
+                rightCount-=1
+            if direction==4:#AI comes from top
+                leftCount-=1
+        if checkSurround(red)==2:#AI faces left
+            #-print("addCount-AI left")#debug
+            if directionMove==3:#left
+                upCount+=1
+            if directionMove==4:#down
+                leftCount+=1
+            if directionMove==1:#up
+                rightCount+=1
+            if direction==2:#AI comes from left
+                upCount-=1
+            if direction==4:#AI comes from top
+                rightCount-=1
+            if direction==1:#AI comes from bottom
+                leftCount-=1
+        if checkSurround(red)==1:#AI faces down
+            #-print("addCount-AI down")#debug
+            if directionMove==4:#down
+                upCount+=1
+            if directionMove==2:#right
+                leftCount+=1
+            if directionMove==3:#left
+                rightCount+=1
+            if direction==1:#AI comes from bottom
+                upCount-=1
+            if direction==2:#AI comes from left
+                rightCount-=1
+            if direction==3:#AI comes from right
+                leftCount-=1
+        #check blue
+        if checkSurround(red)==0:
+            if checkSurround(blue)==4:#AI faces up
+                #-print("addCount-AI up")#debug
                 if directionMove==1:#up
                     upCount+=1
                 if directionMove==3:#left
                     leftCount+=1
                 if directionMove==2:#right
                     rightCount+=1
-            if direction==2:#right
+                if direction==4:#AI comes from top
+                    upCount-=1
+                if direction==3:#AI comes from right
+                    rightCount-=1
+                if direction==2:#AI comes from left
+                    leftCount-=1
+            if checkSurround(red)==3:#AI faces right
+                #-print("addCount-AI right")#debug
                 if directionMove==2:#right
                     upCount+=1
                 if directionMove==1:#up
                     leftCount+=1
                 if directionMove==4:#down
                     rightCount+=1
-            if direction==3:#left
+                if direction==3:#AI comes from right
+                    upCount-=1
+                if direction==1:#AI comes from bottom
+                    rightCount-=1
+                if direction==4:#AI comes from top
+                    leftCount-=1
+            if checkSurround(red)==2:#AI faces left
+                #-print("addCount-AI left")#debug
                 if directionMove==3:#left
                     upCount+=1
                 if directionMove==4:#down
                     leftCount+=1
                 if directionMove==1:#up
                     rightCount+=1
-            if direction==4:#down
+                if direction==2:#AI comes from left
+                    upCount-=1
+                if direction==4:#AI comes from top
+                    rightCount-=1
+                if direction==1:#AI comes from bottom
+                    leftCount-=1
+            if checkSurround(red)==1:#AI faces down
+                #-print("addCount-AI down")#debug
                 if directionMove==4:#down
                     upCount+=1
                 if directionMove==2:#right
                     leftCount+=1
                 if directionMove==3:#left
                     rightCount+=1
-                    
-        else: #intersection already traveled
-            if newscreen.get_at((currentX, currentY - blockSize)) == red:#up-ai faces down
-                if direction==4:#ai comes in from bottom-faces up
+                if direction==1:#AI comes from bottom
                     upCount-=1
-                if direction==3:#ai comes in from right-faces left
-                    leftCount-=1
-                if direction==2:#ai comes in from left-faces right
+                if direction==2:#AI comes from left
                     rightCount-=1
-            elif newscreen.get_at((currentX + blockSize, currentY)) == red:#right-ai faces left
-                if direction==2:#ai comes in from left-faces right
-                    upCount-=1
-                if direction==1:#ai comes in from bottom-faces up
+                if direction==3:#AI comes from right
                     leftCount-=1
-                if direction==4:#ai comes in from top-faces down
-                    rightCount-=1
-            elif newscreen.get_at((currentX - blockSize, currentY)) == red:#left-ai faces right
-                if direction==3:#ai comes in from right-faces left
-                    upCount-=1
-                if direction==4:#ai comes in from top-faces down
-                    leftCount-=1
-                if direction==1:#ai comes in from bottom-faces up
-                    rightCount-=1
-            elif newscreen.get_at((currentX, currentY + blockSize)) == red:#down-ai faces up
-                if direction==4:#ai comes in from top-faces down
-                    upCount-=1
-                if direction==2:#ai comes in from left-faces right
-                    leftCount-=1
-                if direction==3:#ai comes in from right-faces left
-                    rightCount-=1
-                       
 
-    print("directionMove",directionMove)
-    print("direction",direction)
-    print("RIGHT PATH CHOSEN",rightCount)
-    print("LEFT PATH CHOSEN",leftCount)
-    print("FRONT PATH CHOSEN",upCount)
-    time.sleep(0)
 # Check if all paths of an intersection have been travelled. If so, go back on red
 def intersection(isInt,firstTime):
     global direction, upCount, rightCount, leftCount
@@ -457,18 +475,18 @@ def intersection(isInt,firstTime):
         moveUp(currentX, currentY, blockSize, blue)
     elif newscreen.get_at((currentX + blockSize, currentY)) == white:#right
         addCount(isInt,2,firstTime)
-        direction=2
+        direction = 2
         moveRight(currentX, currentY, blockSize, blue)
     elif newscreen.get_at((currentX - blockSize, currentY)) == white:#left
         addCount(isInt,3,firstTime)
-        direction=3
+        direction = 3
         moveLeft(currentX, currentY, blockSize, blue)
     elif newscreen.get_at((currentX, currentY + blockSize)) == white:#down
         addCount(isInt,4,firstTime)
         direction = 4
         moveDown(currentX, currentY, blockSize, blue)
     else:
-        if checkRed() == False:#no red
+        if checkSurround(red) == 0:#no red
             if newscreen.get_at((currentX, currentY - blockSize)) == blue:#up
                 addCount(isInt,1,firstTime)
                 direction = 1
@@ -485,10 +503,22 @@ def intersection(isInt,firstTime):
                 addCount(isInt,4,firstTime)
                 direction = 4
                 moveDown(currentX, currentY, blockSize, blue)
-
-    
-            
-
+        elif checkSurround(red)==1:
+            addCount(isInt,1,firstTime)
+            direction = 1
+            moveUp(currentX, currentY, blockSize, blue)
+        elif checkSurround(red)==2:
+            addCount(isInt,2,firstTime)
+            direction = 2
+            moveRight(currentX, currentY, blockSize, blue)
+        elif checkSurround(red)==3:
+            addCount(isInt,3,firstTime)
+            direction = 3
+            moveLeft(currentX, currentY, blockSize, blue)
+        elif checkSurround(red)==4:
+            addCount(isInt,4,firstTime)
+            direction = 4
+            moveDown(currentX, currentY, blockSize, blue)
 
 # ------------- OUR ALGORITHM -------------
 
@@ -561,10 +591,3 @@ while 0 != currentY:
             else:
                 down(white)
     #-print("direction-main", direction)
-    pygame.image.save(newscreen, "capture.png")
-pygame.image.save(newscreen, "capture.png")
-
-print("RIGHT PATH CHOSEN",rightCount,"TIMES")
-print("LEFT PATH CHOSEN",leftCount,"TIMES")
-print("FRONT PATH CHOSEN",upCount,"TIMES")
-#time.sleep(5)
